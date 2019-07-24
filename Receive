@@ -1,0 +1,26 @@
+#include <RH_ASK.h>
+#include <SPI.h> 
+ 
+RH_ASK rf_driver;
+int i;
+ 
+void setup()
+{
+    rf_driver.init();
+    Serial.begin(9600);
+    pinMode(13,OUTPUT);
+}
+ 
+void loop()
+{
+    uint8_t buf[1];
+    uint8_t buflen = sizeof(buf);
+    if (rf_driver.recv(buf, &buflen))
+    {
+      
+      Serial.println((char*)buf);  
+      i= atoi((char*)buf);
+      if (i==1){digitalWrite(13,HIGH);}
+      else if (i==0){digitalWrite(13,LOW);}
+    }
+}
