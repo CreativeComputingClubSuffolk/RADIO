@@ -1,0 +1,37 @@
+#include <RH_ASK.h>
+#include <SPI.h>
+
+RH_ASK rf_driver;
+int sensorPin = A0;
+int sensorValue = 0; 
+
+String val;
+
+void setup() {
+  rf_driver.init();
+   pinMode(13,OUTPUT);
+}
+
+void loop() {
+  
+  sensorValue = analogRead(sensorPin);
+  Serial.println(sensorValue);
+
+    if (sensorValue>500)
+    {
+        digitalWrite(13, HIGH);
+        val = "1";  
+      }
+    else
+     {
+        digitalWrite(13, LOW); 
+        val = "0";  
+     }
+
+    static char *msg = val.c_str();
+    
+    rf_driver.send((uint8_t *)msg, strlen(msg));
+    rf_driver.waitPacketSent();
+  
+    delay(1000);
+}
